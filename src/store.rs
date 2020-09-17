@@ -1,4 +1,3 @@
-
 use std::io::Error as IoError;
 
 use log::trace;
@@ -7,12 +6,10 @@ use flv_future_aio::bytes::Bytes;
 use flv_future_aio::bytes::BytesMut;
 use flv_future_aio::fs::AsyncFileSlice;
 
-
 use crate::api::Request;
 use crate::api::RequestMessage;
 use crate::api::ResponseMessage;
-use crate::{ Encoder, Version };
-
+use crate::{Encoder, Version};
 
 pub enum StoreValue {
     Bytes(Bytes),
@@ -57,9 +54,6 @@ where
         Ok(())
     }
 }
-
-
-
 
 /// This is same as encoding in the ResponseMessage but can encode async file slice
 impl<P> FileWrite for ResponseMessage<P>
