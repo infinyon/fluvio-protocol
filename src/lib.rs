@@ -23,6 +23,5 @@ pub mod codec {
     pub use fluvio_protocol_codec::FluvioCodec;
 }
 
-
 #[cfg(all(unix, feature = "store"))]
 pub mod store;
