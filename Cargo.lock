@@ -46,9 +46,9 @@ dependencies = [
 
 [[package]]
 name = "fluvio-future"
-version = "0.1.0"
+version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0a74031edddc43194a5f8161d5701b133e69574e9fdb7fa76cd4661f0999b045"
+checksum = "5587c8485fcb8a2a435bc7745d09a047ffde71afa5c8928f8fbe99b519a62c62"
 dependencies = [
  "log",
  "tracing",
