@@ -83,7 +83,6 @@ name = "fluvio-protocol-codec"
 version = "0.1.1"
 dependencies = [
  "bytes",
- "fluvio-future",
  "fluvio-protocol-core",
  "log",
  "tokio-util",
