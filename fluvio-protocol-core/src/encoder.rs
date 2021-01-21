@@ -122,7 +122,7 @@ where
     V: Encoder,
 {
     fn write_size(&self, version: Version) -> usize {
-        let mut len: usize = (0 as u16).write_size(version);
+        let mut len: usize = (0_u16).write_size(version);
 
         for (key, value) in self.iter() {
             len += key.write_size(version);
@@ -408,6 +408,35 @@ impl EncoderVarInt for Option<Vec<u8>> {
     }
 }
 
+impl EncoderVarInt for Vec<u8> {
+    fn var_write_size(&self) -> usize {
+
+        let len: i64 = self.len() as i64;
+        let bytes = variant_size(len);
+
+        bytes + self.len()
+    }
+
+    fn encode_varint<T>(&self, dest: &mut T) -> Result<(), Error>
+    where
+        T: BufMut,
+    {
+        let len: i64 = self.len() as i64;
+        len.encode_varint(dest)?;
+
+        if dest.remaining_mut() < self.len() {
+            return Err(Error::new(
+                ErrorKind::UnexpectedEof,
+                format!("not enough capacity for byte array: {}", self.len()),
+            ));
+        }
+
+        dest.put_slice(&self);
+
+        Ok(())
+    }
+}
+
 #[cfg(test)]
 mod test {
 
@@ -600,6 +629,15 @@ mod test {
     fn test_varint_encode_array_opton_vec8_simple_array() {
         let mut dest = vec![];
         let value: Option<Vec<u8>> = Some(vec![0x64, 0x6f, 0x67]);
+        let result = value.encode_varint(&mut dest);
+        assert!(result.is_ok());
+        assert_eq!(dest.len(), 4);
+    }
+
+    #[test]
+    fn test_varint_encode_array_vec8_simple_array() {
+        let mut dest = vec![];
+        let value: Vec<u8> = vec![0x64, 0x6f, 0x67];
         let result = value.encode_varint(&mut dest);
         assert!(result.is_ok());
         assert_eq!(dest.len(), 4);

@@ -22,9 +22,7 @@ impl RecordSet {
 #[test]
 fn test_encode_recordset() {
     let mut recordset = RecordSet::default();
-    let mut record = SimpleRecord::default();
-    record.attributes = 10;
-    record.len = 4;
+    let record = SimpleRecord { attributes: 10, len: 4 };
     recordset.add_record(record);
 
     let mut src = vec![];
