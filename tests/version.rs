@@ -15,7 +15,11 @@ struct TestRecord {
 #[test]
 fn test_encode_version() {
     flv_util::init_logger();
-    let record = TestRecord { value2: 10, value3: 5, ..Default::default() };
+    let record = TestRecord {
+        value2: 10,
+        value3: 5,
+        ..Default::default()
+    };
 
     // version 0 should only encode value
     let mut dest = vec![];
