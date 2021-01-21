@@ -45,8 +45,9 @@ where
     where
         T: Buf,
     {
-        let mut len: i32 = 0;
-        len.decode(src, version)?;
+        let mut len: i64 = 0;
+
+        len.decode_varint(src)?;
 
         trace!("decoding Vec len:{}", len);
 
@@ -61,7 +62,7 @@ where
     }
 }
 
-fn decode_vec<T, M>(len: i32, item: &mut Vec<M>, src: &mut T, version: Version) -> Result<(), Error>
+fn decode_vec<T, M>(len: i64, item: &mut Vec<M>, src: &mut T, version: Version) -> Result<(), Error>
 where
     T: Buf,
     M: Default + Decoder,
@@ -658,6 +659,25 @@ mod test {
         assert!(result.is_ok());
         assert_eq!(value.len(), 3);
         assert_eq!(value[0], 0x64);
+    }
+
+    #[test]
+    fn test_vec8_encode_and_decode() {
+        use crate::encoder::Encoder;
+        use crate::encoder::EncoderVarInt;
+        let in_vec : Vec<u8> = vec![1, 2, 3];
+        let mut out : Vec<u8> = vec![];
+        let ret = in_vec.encode(&mut out, 0);
+        assert!(ret.is_ok());
+        println!("{:#x?}, {:?}", out, out.len());
+
+        //let in_vec : Option<Vec<u8>> = Some(vec![1, 2, 3]);
+        let in_vec : Option<Vec<u8>> = Some(vec![1, 2, 3]);
+        let mut out : Vec<u8> = vec![];
+        let ret = in_vec.encode_varint(&mut out);
+        assert!(ret.is_ok());
+        println!("{:#x?}, {:?}", out, out.len());
+
     }
 
     #[test]
