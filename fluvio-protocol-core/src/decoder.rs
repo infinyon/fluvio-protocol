@@ -629,7 +629,7 @@ mod test {
     #[test]
     fn test_decode_valid_string_vectors() {
         // array of strings with "test"
-        let data = [0x02, 0x00, 0x04, 0x74, 0x65, 0x73, 0x74];
+        let data = [0,0,0,0x01, 0x00, 0x04, 0x74, 0x65, 0x73, 0x74];
 
         let mut values: Vec<String> = Vec::new();
         let result = values.decode(&mut Cursor::new(&data), 0);
