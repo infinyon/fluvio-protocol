@@ -51,7 +51,7 @@ where
 {
     fn write_size(&self, version: Version) -> usize {
         self.iter()
-            .fold(variant_size(self.len() as i64), |sum, val| sum + val.write_size(version))
+            .fold(4, |sum, val| sum + val.write_size(version))
     }
 
     fn encode<T>(&self, dest: &mut T, version: Version) -> Result<(), Error>
@@ -64,11 +64,11 @@ where
                 "not enough capacity for vec",
             ));
         }
-        let len : i64 = self.len() as i64;
-        len.encode_varint(dest)?;
+
+        dest.put_u32(self.len() as u32);
 
         for ref v in self {
-            v.encode::<T>(dest, version)?;
+            v.encode(dest, version)?;
         }
 
         Ok(())

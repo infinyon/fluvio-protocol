@@ -45,9 +45,8 @@ where
     where
         T: Buf,
     {
-        let mut len: i64 = 0;
-
-        len.decode_varint(src)?;
+        let mut len: i32 = 0;
+        len.decode(src, version)?;
 
         trace!("decoding Vec len:{}", len);
 
@@ -62,7 +61,7 @@ where
     }
 }
 
-fn decode_vec<T, M>(len: i64, item: &mut Vec<M>, src: &mut T, version: Version) -> Result<(), Error>
+fn decode_vec<T, M>(len: i32, item: &mut Vec<M>, src: &mut T, version: Version) -> Result<(), Error>
 where
     T: Buf,
     M: Default + Decoder,
